@@ -29,7 +29,7 @@ fn setup_step_by_step(mut commands: Commands, assets: Res<AssetServer>) {
     commands.insert_resource(Assets(assets));
 }
 
-fn step(
+fn step_mouse(
     mut commands: Commands,
     mut grid: ResMut<Grid>,
     assets: Res<Assets>,
@@ -56,6 +56,22 @@ fn step(
                 });
                 // sleep(Duration::from_millis(20));
             }
+        }
+    }
+}
+
+fn step(mut commands: Commands, mut grid: ResMut<Grid>, assets: Res<Assets>) {
+    for _ in 0..20 {
+        if let Some((x, y, tile_name)) = grid.tick() {
+            let img = assets.0.get(&tile_name).unwrap();
+            let pos = Transform::from_xyz((x as f32 - 80.0) * 8.0, (y as f32 - 40.0) * 8.0, 0.0);
+
+            commands.spawn_bundle(SpriteBundle {
+                texture: img.clone(),
+                transform: pos,
+                ..default()
+            });
+            // sleep(Duration::from_millis(20));
         }
     }
 }
