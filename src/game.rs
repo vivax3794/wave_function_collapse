@@ -60,7 +60,7 @@ fn setup_step_by_step(mut commands: Commands, assets: Res<AssetServer>) {
     let tileset = terrain::load_tiles();
     let asset_names = tileset.0.keys().cloned().collect();
     println!("TILES: {:?} \n\n", tileset);
-    let grid = Grid::new(tileset, 200, 120);
+    let grid = Grid::new(tileset, 160, 80);
 
     let assets = terrain::load_assets(&assets, asset_names);
 
@@ -77,7 +77,7 @@ fn step(mut commands: Commands, mut grid: ResMut<Grid>, assets: Res<Assets>) {
         let (x, y, tile_name) = grid.tick();
 
         let img = assets.0.get(&tile_name).unwrap();
-        let pos = Transform::from_xyz((x as f32 - 100.0) * 8.0, (y as f32 - 60.0) * 8.0, 0.0);
+        let pos = Transform::from_xyz((x as f32 - 80.0) * 8.0, (y as f32 - 40.0) * 8.0, 0.0);
 
         commands.spawn_bundle(SpriteBundle {
             texture: img.clone(),

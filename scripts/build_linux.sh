@@ -4,7 +4,7 @@ mkdir builds/linux
 
 echo "BUILDING LINUX"
 cross build --target x86_64-unknown-linux-gnu --release
-cp -v  target/x86_64-unknown-linux-gnu/release/astroids builds/linux
+cp -v  target/x86_64-unknown-linux-gnu/release/wfc builds/linux
 cp -vr assets builds/linux
 
 echo "PACKACING LINUX"

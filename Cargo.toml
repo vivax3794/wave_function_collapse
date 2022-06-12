@@ -6,8 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy_asset_loader = "0.11.0"
-bevy_ecs_tilemap = "0.6.0"
 rand = "0.8.5"
 itertools = "0.10.3"
 
@@ -39,9 +37,9 @@ features = [
   # "bevy_ui",            # UI toolkit
 
   # File formats:
-  "png",
-  "hdr",
-  "vorbis",
+  # "png",
+  # "hdr",
+  # "vorbis",
 
   # These are other features that may be of interest:
   # (add any of these that you need)
@@ -49,19 +47,19 @@ features = [
   # Bevy functionality:
   # "wayland",              # Linux: Support Wayland windowing system
   # "subpixel_glyph_atlas", # Subpixel antialiasing for text/fonts
-  "serialize",            # Support for `serde` Serialize/Deserialize
+  # "serialize",            # Support for `serde` Serialize/Deserialize
 
   # File formats:
-  "ktx2", # preferred format for GPU textures
-  "dds",
+  # "ktx2", # preferred format for GPU textures
+  # "dds",
   "jpeg",
-  "bmp",
-  "tga",
-  "basis-universal",
-  "zstd", # needed if using zstd in KTX2 files
-  "flac",
-  "mp3",
-  "wav",
+  # "bmp",
+  # "tga",
+  # "basis-universal",
+  # "zstd", # needed if using zstd in KTX2 files
+  # "flac",
+  # "mp3",
+  # "wav",
 
   # Development/Debug features:
   # "dynamic",      # Dynamic linking for faster compile-times
