@@ -136,25 +136,31 @@ impl Grid {
         Grid(vec![vec![Tile::new(tiles); height]; width], 0)
     }
 
-    fn find_lowest_entropy(&self) -> (usize, usize) {
-        let cords = Itertools::cartesian_product(0..self.0.len(), 0..self.0[0].len())
+    fn find_lowest_entropy<I: Iterator<Item = usize> + Itertools + Clone>(
+        &self,
+        x_range: I,
+        y_range: I,
+    ) -> Option<(usize, usize)> {
+        let cords = Itertools::cartesian_product(x_range, y_range)
             .filter(|(x, y)| matches!(self.0[*x][*y], Tile::Wave(_)));
 
-        let min_enp = cords
+        if let Some(min_enp) = cords
             .clone()
             .map(|(x, y)| match &self.0[x][y] {
                 Tile::Collapsed(_, _) => panic!("This should not be possible."),
                 Tile::Wave(map) => map.entorpy(),
             })
             .min()
-            .unwrap();
-        cords
-            .filter(|(x, y)| match &self.0[*x][*y] {
-                Tile::Collapsed(_, _) => false,
-                Tile::Wave(map) => map.entorpy() == min_enp,
-            })
-            .choose(&mut thread_rng())
-            .unwrap()
+        {
+            cords
+                .filter(|(x, y)| match &self.0[*x][*y] {
+                    Tile::Collapsed(_, _) => false,
+                    Tile::Wave(map) => map.entorpy() == min_enp,
+                })
+                .choose(&mut thread_rng())
+        } else {
+            None
+        }
     }
 
     // this gets NON COLLAPSED neighbours
@@ -200,13 +206,24 @@ impl Grid {
         }
     }
 
-    pub fn tick(&mut self) -> (usize, usize, String) {
-        let (x, y) = self.find_lowest_entropy();
-        self.0[x][y].collapse();
-        self.propagate((x, y));
-        self.1 += 1;
+    pub fn tick_in_area<I: Iterator<Item = usize> + Itertools + Clone>(
+        &mut self,
+        x_range: I,
+        y_range: I,
+    ) -> Option<(usize, usize, String)> {
+        if let Some((x, y)) = self.find_lowest_entropy(x_range, y_range) {
+            self.0[x][y].collapse();
+            self.propagate((x, y));
+            self.1 += 1;
 
-        (x, y, self.0[x][y].get_tiles().into_iter().next().unwrap())
+            Some((x, y, self.0[x][y].get_tiles().into_iter().next().unwrap()))
+        } else {
+            None
+        }
+    }
+
+    pub fn tick(&mut self) -> Option<(usize, usize, String)> {
+        self.tick_in_area(0..self.0.len(), 0..self.0[0].len())
     }
 
     pub fn collapse_all(&mut self) {

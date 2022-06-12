@@ -15,45 +15,6 @@ impl Plugin for GamePlugin {
     }
 }
 
-fn create_full_grid(mut commands: Commands, assets: Res<AssetServer>) {
-    let tileset = terrain::load_tiles();
-    let asset_names = tileset.0.keys().cloned().collect();
-
-    println!("TILES: {:?} \n\n", tileset);
-    let mut grid = Grid::new(tileset, 140, 80);
-    grid.collapse_all();
-
-    let assets = terrain::load_assets(&assets, asset_names);
-
-    let grid: Vec<Vec<&Handle<Image>>> = grid
-        .0
-        .into_iter()
-        .map(|v| {
-            v.into_iter()
-                .map(|n| {
-                    let name = n.get_tiles().iter().next().unwrap().clone();
-                    assets
-                        .get(&name)
-                        .expect(&format!("could not find asset for {}", name))
-                })
-                .collect()
-        })
-        .collect();
-
-    for x in 0..140 {
-        for y in 0..80 {
-            let img = grid[x][y];
-            let pos = Transform::from_xyz((x as f32 - 70.0) * 8.0, (y as f32 - 40.0) * 8.0, 0.0);
-
-            commands.spawn_bundle(SpriteBundle {
-                texture: img.clone(),
-                transform: pos,
-                ..default()
-            });
-        }
-    }
-}
-
 struct Assets(HashMap<String, Handle<Image>>);
 
 fn setup_step_by_step(mut commands: Commands, assets: Res<AssetServer>) {
@@ -68,22 +29,33 @@ fn setup_step_by_step(mut commands: Commands, assets: Res<AssetServer>) {
     commands.insert_resource(Assets(assets));
 }
 
-fn step(mut commands: Commands, mut grid: ResMut<Grid>, assets: Res<Assets>) {
-    for _ in 0..20 {
-        if grid.1 == grid.0.len() * grid.0[0].len() {
-            return;
+fn step(
+    mut commands: Commands,
+    mut grid: ResMut<Grid>,
+    assets: Res<Assets>,
+    windows: Res<Windows>,
+) {
+    let window = windows.get_primary().unwrap();
+
+    if let Some(position) = window.cursor_position() {
+        let position = position / 8.0;
+        println!("{}", position);
+        for _ in 0..4 {
+            if let Some((x, y, tile_name)) = grid.tick_in_area(
+                (position.x.max(10.0) as usize - 10)..(position.x.min(149.0) as usize + 10),
+                (position.y.max(10.0) as usize - 10)..(position.y.min(69.0) as usize + 10),
+            ) {
+                let img = assets.0.get(&tile_name).unwrap();
+                let pos =
+                    Transform::from_xyz((x as f32 - 80.0) * 8.0, (y as f32 - 40.0) * 8.0, 0.0);
+
+                commands.spawn_bundle(SpriteBundle {
+                    texture: img.clone(),
+                    transform: pos,
+                    ..default()
+                });
+                // sleep(Duration::from_millis(20));
+            }
         }
-
-        let (x, y, tile_name) = grid.tick();
-
-        let img = assets.0.get(&tile_name).unwrap();
-        let pos = Transform::from_xyz((x as f32 - 80.0) * 8.0, (y as f32 - 40.0) * 8.0, 0.0);
-
-        commands.spawn_bundle(SpriteBundle {
-            texture: img.clone(),
-            transform: pos,
-            ..default()
-        });
-        // sleep(Duration::from_millis(20));
     }
 }
