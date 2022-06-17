@@ -5,9 +5,9 @@ mkdir builds/web
 echo "BUILDING WEB"
 cargo build --target wasm32-unknown-unknown --release
 echo "GENERATING WEB BINDINGS"
-wasm-bindgen --no-typescript --out-dir ./builds/web --target web ./target/wasm32-unknown-unknown/release/astroids.wasm
+wasm-bindgen --no-typescript --out-dir ./builds/web --target web ./target/wasm32-unknown-unknown/release/wfc.wasm
 echo "OPTIMIZING WASM BUILD"
-wasm-opt -O3 -o ./builds/web/astroids_bg.wasm ./builds/web/astroids_bg.wasm
+wasm-opt -O3 -o ./builds/web/wfc_bg.wasm ./builds/web/wfc_bg.wasm
 
 echo "CREATING WEBAPGE"
 cp -v scripts/index.html ./builds/web/

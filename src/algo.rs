@@ -22,16 +22,6 @@ impl Direction {
             Direction::Right => Direction::Left,
         }
     }
-
-    fn iter() -> Iter<'static, Direction> {
-        static DIRECTIONS: [Direction; 4] = [
-            Direction::Down,
-            Direction::Up,
-            Direction::Left,
-            Direction::Right,
-        ];
-        DIRECTIONS.iter()
-    }
 }
 
 #[derive(Clone, PartialEq, Debug)]
@@ -50,15 +40,6 @@ impl ConnectionRules {
             Direction::Down => &self.down,
             Direction::Left => &self.left,
             Direction::Right => &self.right,
-        }
-    }
-
-    fn get_mut(&mut self, dir: &Direction) -> &mut String {
-        match dir {
-            Direction::Up => &mut self.up,
-            Direction::Down => &mut self.down,
-            Direction::Left => &mut self.left,
-            Direction::Right => &mut self.right,
         }
     }
 }

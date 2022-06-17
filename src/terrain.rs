@@ -57,10 +57,10 @@ pub fn load_tiles() -> TileCollection {
         create_tile!(40; "wall_TL_turn" => "wall_hor"; "misc"; "wall_hor"; "misc"),
         // WATER
         create_tile!(200; "water" => "water"),
-        create_tile!(100; "water_left" => "water_left"; "water_left"; "misc"; "water"),
-        create_tile!(100; "water_right" => "water_right"; "water_right"; "water"; "misc"),
-        create_tile!(100; "water_top" => "misc"; "water"; "water_top"; "water_top"),
-        create_tile!(100; "water_bottom" => "water"; "misc"; "water_bottom"; "water_bottom"),
+        create_tile!(60; "water_left" => "water_left"; "water_left"; "misc"; "water"),
+        create_tile!(60; "water_right" => "water_right"; "water_right"; "water"; "misc"),
+        create_tile!(60; "water_top" => "misc"; "water"; "water_top"; "water_top"),
+        create_tile!(60; "water_bottom" => "water"; "misc"; "water_bottom"; "water_bottom"),
         create_tile!(5; "water_TL" => "misc"; "water_left"; "misc"; "water_top"),
         create_tile!(5; "water_TR" => "misc"; "water_right"; "water_top"; "misc"),
         create_tile!(5; "water_BL" => "water_left"; "misc"; "misc"; "water_bottom"),
@@ -69,6 +69,7 @@ pub fn load_tiles() -> TileCollection {
         create_tile!(5; "water_edge_BR" => "water" ; "water_right"; "water"; "water_bottom"),
         create_tile!(5; "water_edge_TL" => "water_left" ; "water"; "water_top"; "water"),
         create_tile!(5; "water_edge_TR" => "water_right" ; "water"; "water"; "water_top"),
+        // RIVER
     ]))
 }
 
